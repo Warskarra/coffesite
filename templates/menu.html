@@ -20,8 +20,8 @@
                 <a href="/checkout/{{ item.name }}/{{ item.price }}">
                     <button>Order Now</button>
                 </a>
-                {% if current_user.is_authenticated %}
-    <a href="/edit-item/{{ item.id }}">Edit</a>
+             {% if current_user.is_admin %}
+    <a href="/edit-item/{{ item.id }}" style="color: #deab5f;">Edit</a>
 {% endif %}
             </div>
             {% endfor %}

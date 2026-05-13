@@ -25,6 +25,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(200))
+    is_admin = db.Column(db.Boolean, default=False)
 
 class MenuItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -47,18 +48,15 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 @app.route('/')
-@login_required
 def home():
     return render_template('index.html')
 
 @app.route('/menu')
-@login_required
 def menu():
     items = MenuItem.query.all()    
     return render_template('menu.html', items=items)
 
 @app.route('/about')
-@login_required
 def about():
     return render_template('about.html')
 
@@ -84,6 +82,9 @@ def contact():
 @app.route('/add-item', methods=['GET', 'POST'])
 @login_required
 def add_item():
+    if not current_user.is_admin:
+        flash('Access denied.')
+        return redirect(url_for('home'))
     if request.method == 'POST':
         name = request.form['name']
         description = request.form['description']
@@ -97,10 +98,15 @@ def add_item():
         
         flash('Menu item added!')
         return redirect(url_for('menu'))
+    
+    return render_template('add_item.html')
 
 @app.route('/edit-item/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_item(id):
+    if not current_user.is_admin:
+        flash('Access denied.')
+        return redirect(url_for('home'))
     item = MenuItem.query.get(id)
     
     if request.method == 'POST':
@@ -114,8 +120,7 @@ def edit_item(id):
         return redirect(url_for('menu'))
     
     return render_template('edit_item.html', item=item)
-    
-    return render_template('add_item.html')
+
 @app.route('/checkout/<item>/<price>', methods=['GET', 'POST'])
 def checkout(item, price):
     if request.method == 'POST':
