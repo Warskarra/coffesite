@@ -97,6 +97,23 @@ def add_item():
         
         flash('Menu item added!')
         return redirect(url_for('menu'))
+
+@app.route('/edit-item/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_item(id):
+    item = MenuItem.query.get(id)
+    
+    if request.method == 'POST':
+        item.name = request.form['name']
+        item.description = request.form['description']
+        item.price = request.form['price']
+        item.image = request.form['image']
+        item.category = request.form['category']
+        db.session.commit()
+        flash('Item updated!')
+        return redirect(url_for('menu'))
+    
+    return render_template('edit_item.html', item=item)
     
     return render_template('add_item.html')
 @app.route('/checkout/<item>/<price>', methods=['GET', 'POST'])
