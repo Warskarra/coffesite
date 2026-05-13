@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}About Us | Ameers Coffee{% endblock %}
+
+{% block content %}
+<header class="about-hero">
+    <h1>OUR JOURNEY</h1>
+    <p>From a single bean to a world-class experience.</p>
+</header>
+
+<section class="story">
+    <div class="story-images">
+        <img src="{{ url_for('static', filename='pexels-chitokan-2183027-removebg-preview.png') }}" alt="Coffee Heritage" />
+    </div>
+    <div class="story-texts">
+        <div class="title">
+            <div class="line"></div>
+            <h1>Founded in 2026</h1>
+        </div>
+        <p style="font-size: 20px; font-family: 'Courier New', Courier, monospace;">
+            Ameers Coffee started with a simple goal: to serve the perfect cup. 
+            We believe that coffee is more than just a drink—it's a moment of 
+            peace in a busy world. Our beans are ethically sourced and 
+            roasted to perfection.
+        </p>
+    </div>
+</section>
+
+<section class="products">
+    <h1>OUR VALUES</h1>
+    <div class="products-cards">
+        <div class="product-card">
+            <h4>Quality</h4>
+            <p>Only the top 1% of Arabica beans make it into our roastery.</p>
+        </div>
+        <div class="product-card">
+            <h4>Community</h4>
+            <p>Supporting local farmers and creating a space for everyone.</p>
+        </div>
+        <div class="product-card">
+            <h4>Passion</h4>
+            <p>Every cup is brewed by only the best baristas.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

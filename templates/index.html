@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Ameers Coffee{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1 class="first-header">START YOUR DAY</h1>
+    <h1 class="Bakugo"><strong>AMEERS </strong></h1>
+    <h1 class="Bakugo"><strong>COFFEE</strong></h1>
+    <div>
+        <h1 class="second-header">WITH OUR COFFEE</h1>
+        <button onclick='alert("Website to be launched soon!")'>Shop Now</button>
+    </div>
+</section>
+
+<section class="story">
+    <div class="story-images">
+        <img src="{{ url_for('static', filename='pexels-chitokan-2183027-removebg-preview.png') }}" alt="Coffee Story" />
+    </div>
+    <div class="story-texts">
+        <h1>Our Story</h1>
+        <p>Ameers Coffee started with a simple goal: the perfect cup.</p>
+    </div>
+</section>
+{% endblock %}

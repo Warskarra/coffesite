@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Our Menu | Ameers Coffee{% endblock %}
+
+{% block content %}
+<main class="menu-container">
+    <header class="menu-header">
+        <h1>OUR MENU</h1>
+    </header>
+
+    <section class="menu-category">
+        <h2 class="category-title">Signature Brews</h2>
+        <div class="products-cards">
+            {% for item in items %}
+            <div class="product-card">
+                <img src="{{ url_for('static', filename=item.image) }}" alt="{{ item.name }}">
+                <h4>{{ item.name }}</h4>
+                <p>{{ item.description }}</p>
+                <p class="price">${{ item.price }}</p>
+                <a href="/checkout/{{ item.name }}/{{ item.price }}">
+                    <button>Order Now</button>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}

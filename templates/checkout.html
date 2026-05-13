@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout | Ameers Coffee{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 50px;">
+    <h1>Order: {{ item }}</h1>
+    <h3 style="color: #deab5f;">Price: ${{ price }}</h3>
+
+    <form method="POST" style="margin-top: 30px;">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <br><br>
+        <input type="text" name="phone" placeholder="Your Phone Number" required>
+        <br><br>
+        <textarea name="address" placeholder="Your Delivery Address" required></textarea>
+        <br><br>
+        <button type="submit">Place Order</button>
+    </form>
+</div>
+{% endblock %}

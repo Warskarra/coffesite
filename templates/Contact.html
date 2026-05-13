@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us | Ameers Coffee{% endblock %}
+
+{% block content %}
+<section class="contact-container">
+    <div class="contact-info">
+        <h1>GET IN TOUCH</h1>
+        <p>Have questions? We’d love to hear from you.</p>
+        
+        <div class="info-item">
+            <h4 style="color: #deab5f;">PHONELINE</h4>
+            <p>+234 814 848 0545</p>
+        </div>
+
+        <div class="info-item">
+            <h4 style="color: #deab5f;">EMAIL</h4>
+            <p>ameerscoffee@gmail.com</p>
+        </div>
+
+        <div class="info-item">
+            <h4 style="color: #deab5f;">ADDRESS</h4>
+            <p>Malali Layout near Malka Academy <br>Kaduna, Nigeria</p>
+        </div>
+    </div>
+
+    <div class="contact-form">
+        {% if success %}
+            <div style="text-align: center; padding: 20px;">
+                <h2 style="color: #deab5f;">Message Sent!</h2>
+                <p>Thanks for reaching out. We'll get back to you soon.</p>
+                <a href="/contact" style="color: white; text-decoration: underline;">Send another?</a>
+            </div>
+        {% else %}
+             <form method="POST">
+            <input type="text" name="name" placeholder="Your name" required>
+            <br><br>
+            <input type="email" name="email" placeholder="Your email" required>
+            <br><br>
+            <textarea name="message" placeholder="Your message" required></textarea>
+            <br><br>
+            <button type="submit">Send Message</button>
+        </form>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
