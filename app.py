@@ -3,6 +3,7 @@ from flask_bcrypt import Bcrypt
 from flask_mail import Mail, Message
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'ameerscoffee123'
@@ -42,6 +43,11 @@ class Order(db.Model):
     name = db.Column(db.String(100))
     phone = db.Column(db.String(20))
     address = db.Column(db.String(200))
+
+class LoginHistory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50))
+    time = db.Column(db.String(100))
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -168,12 +174,36 @@ def login():
         
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
+            
+            # Save login to database
+            log = LoginHistory(username=username, time=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+            db.session.add(log)
+            db.session.commit()
+            
+            # Send email notification
+            msg = Message(
+                subject=f'New Login - {username}',
+                sender=app.config['MAIL_USERNAME'],
+                recipients=['amirtj2007@gmail.com'],
+                body=f'User {username} just logged in at {log.time}'
+            )
+            mail.send(msg)
+            
             flash('Logged in successfully!')
             return redirect(url_for('home'))
         else:
             flash('Wrong username or password')
     
     return render_template('login.html')
+
+@app.route('/login-history')
+@login_required
+def login_history():
+    if not current_user.is_admin:
+        flash('Access denied.')
+        return redirect(url_for('home'))
+    logs = LoginHistory.query.order_by(LoginHistory.id.desc()).all()
+    return render_template('login_history.html', logs=logs)
 
 @app.route('/logout')
 def logout():
