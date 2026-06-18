@@ -4,6 +4,9 @@ from flask_mail import Mail, Message
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from dotenv import load_dotenv
+import os
+
 
 app = Flask(__name__)
 app.secret_key = 'ameerscoffee123'
@@ -20,6 +23,10 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
+load_dotenv()
+
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+
 
 
 class User(db.Model, UserMixin):
@@ -74,7 +81,7 @@ def contact():
         name = request.form['name']
         email = request.form['email']
         message = request.form['message']
-        
+    try:
         msg = Message(
             subject=f'New message from {name}',
             sender=email,
@@ -83,8 +90,11 @@ def contact():
         )
         mail.send(msg)
         success = True
-    
+
+    except Exception as e:
+        print('Error occurred while sending contact email:', e)
     return render_template('contact.html', success=success)
+
 @app.route('/add-item', methods=['GET', 'POST'])
 @login_required
 def add_item():
@@ -138,13 +148,16 @@ def checkout(item, price):
         db.session.add(new_order)
         db.session.commit()
 
-        msg = Message(
-            subject=f'New Order - {item}',
-            sender=app.config['MAIL_USERNAME'],
-            recipients=['amirtj2007@gmail.com'],
-            body=f'Item: {item}\nPrice: ${price}\nName: {name}\nPhone: {phone}\nAddress: {address}'
-        )
-        mail.send(msg)
+        try:
+            msg = Message(
+                subject=f'New Order - {item}',
+                sender=app.config.get('MAIL_USERNAME'),
+                recipients=['amirtj2007@gmail.com'],
+                body=f'Item: {item}\nPrice: ${price}\nName: {name}\nPhone: {phone}\nAddress: {address}'
+            )
+            mail.send(msg)
+        except Exception as e:
+            print('Error occurred while sending order email:', e)
 
         flash('Order placed successfully!')
         return redirect(url_for('home'))
@@ -181,6 +194,7 @@ def login():
             db.session.commit()
             
             # Send email notification
+        try:
             msg = Message(
                 subject=f'New Login - {username}',
                 sender=app.config['MAIL_USERNAME'],
@@ -188,6 +202,8 @@ def login():
                 body=f'User {username} just logged in at {log.time}'
             )
             mail.send(msg)
+        except:
+            print("Error occured while sending")
             
             flash('Logged in successfully!')
             return redirect(url_for('home'))
